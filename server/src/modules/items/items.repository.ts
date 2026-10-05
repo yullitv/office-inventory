@@ -55,7 +55,7 @@ function toItem(row: ItemRow): Item {
 export function createItemsRepository(db: Db) {
   return {
     findAll(): Item[] {
-      const rows = db.prepare(`${SELECT_ITEMS} ORDER BY i.name`).all() as ItemRow[];
+      const rows = db.prepare(SELECT_ITEMS).all() as ItemRow[];
       return rows.map(toItem);
     },
 
@@ -66,7 +66,7 @@ export function createItemsRepository(db: Db) {
 
     findCategories(): string[] {
       const rows = db
-        .prepare('SELECT DISTINCT category FROM items WHERE archived_at IS NULL ORDER BY category')
+        .prepare('SELECT DISTINCT category FROM items WHERE archived_at IS NULL')
         .all() as { category: string }[];
       return rows.map((row) => row.category);
     },

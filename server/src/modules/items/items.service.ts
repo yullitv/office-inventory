@@ -43,13 +43,14 @@ export function createItemsService(repository: ItemsRepository) {
         .findAll()
         .filter((item) => !query.q || matchesSearch(item, query.q))
         .filter((item) => !query.category || item.category === query.category)
-        .filter((item) => !query.state || getItemState(item) === query.state);
+        .filter((item) => !query.state || getItemState(item) === query.state)
+        .sort((a, b) => a.name.localeCompare(b.name, 'uk'));
     },
 
     getById: getOrThrow,
 
     listCategories(): string[] {
-      return repository.findCategories();
+      return repository.findCategories().sort((a, b) => a.localeCompare(b, 'uk'));
     },
 
     create(input: CreateItemInput): Item {
