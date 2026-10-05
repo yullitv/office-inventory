@@ -1,7 +1,6 @@
 import { Button, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import type { Item } from '../api/types';
-import { getItemState } from '../utils/format';
 import { DeleteItemModal } from './modals/DeleteItemModal';
 import { IssueLoanModal } from './modals/IssueLoanModal';
 import { ItemFormModal } from './modals/ItemFormModal';
@@ -17,17 +16,16 @@ export function ItemActions({ item, onDeleted }: Props) {
   const [returnOpened, returnModal] = useDisclosure();
   const [editOpened, edit] = useDisclosure();
   const [deleteOpened, remove] = useDisclosure();
-  const state = getItemState(item);
 
   return (
     <>
       <Group gap="xs" wrap="nowrap">
-        {state === 'available' && (
+        {item.state === 'available' && (
           <Button size="xs" onClick={issue.open}>
             Видати
           </Button>
         )}
-        {state === 'on_loan' && (
+        {item.state === 'on_loan' && (
           <Button size="xs" variant="light" onClick={returnModal.open}>
             Повернути
           </Button>
@@ -40,8 +38,8 @@ export function ItemActions({ item, onDeleted }: Props) {
           variant="subtle"
           color="red"
           onClick={remove.open}
-          disabled={state === 'on_loan'}
-          title={state === 'on_loan' ? 'Спочатку поверніть річ' : undefined}
+          disabled={item.state === 'on_loan'}
+          title={item.state === 'on_loan' ? 'Спочатку поверніть річ' : undefined}
         >
           Видалити
         </Button>

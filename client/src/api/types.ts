@@ -7,6 +7,7 @@ export type CurrentLoan = {
   employeeName: string;
   issuedAt: string;
   dueDate: string;
+  isOverdue: boolean;
 };
 
 export type Item = {
@@ -16,6 +17,7 @@ export type Item = {
   inventoryNumber: string | null;
   description: string | null;
   status: ItemStatus;
+  state: ItemState;
   createdAt: string;
   updatedAt: string;
   currentLoan: CurrentLoan | null;

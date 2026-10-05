@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isOverdue } from '../src/modules/loans/loans.service.js';
+import { isOverdue } from '../src/modules/loans/loans.rules.js';
 
 describe('isOverdue', () => {
   const today = '2026-10-05';
