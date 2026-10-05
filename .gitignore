@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# build & coverage
+dist/
+coverage/
+
+# database
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# IDE / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
