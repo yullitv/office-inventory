@@ -83,7 +83,7 @@ export function ItemDetailsPage() {
                 <Table.Th>Видано</Table.Th>
                 <Table.Th>Термін</Table.Th>
                 <Table.Th>Повернуто</Table.Th>
-                <Table.Th>Примітка</Table.Th>
+                <Table.Th>Примітки</Table.Th>{' '}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -101,7 +101,18 @@ export function ItemDetailsPage() {
                       </Badge>
                     )}
                   </Table.Td>
-                  <Table.Td c="dimmed">{loan.note}</Table.Td>
+                  <Table.Td>
+                    {loan.note && (
+                      <Text size="sm" c="dimmed">
+                        {loan.note}
+                      </Text>
+                    )}
+                    {loan.returnNote && (
+                      <Text size="sm" c="dimmed">
+                        Під час повернення: {loan.returnNote}
+                      </Text>
+                    )}
+                  </Table.Td>{' '}
                 </Table.Tr>
               ))}
             </Table.Tbody>
