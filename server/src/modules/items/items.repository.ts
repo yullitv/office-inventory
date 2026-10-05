@@ -1,6 +1,6 @@
 import type { Db } from '../../db/connection.js';
 import type { CreateItemInput, UpdateItemInput } from './items.schemas.js';
-import type { Item, ItemStatus } from './items.types.js';
+import type { ItemRecord, ItemStatus } from './items.types.js';
 
 type ItemRow = {
   id: number;
@@ -29,7 +29,7 @@ const SELECT_ITEMS = `
   WHERE i.archived_at IS NULL
 `;
 
-function toItem(row: ItemRow): Item {
+function toItemRecord(row: ItemRow): ItemRecord {
   return {
     id: row.id,
     name: row.name,
@@ -54,14 +54,14 @@ function toItem(row: ItemRow): Item {
 
 export function createItemsRepository(db: Db) {
   return {
-    findAll(): Item[] {
+    findAll(): ItemRecord[] {
       const rows = db.prepare(SELECT_ITEMS).all() as ItemRow[];
-      return rows.map(toItem);
+      return rows.map(toItemRecord);
     },
 
-    findById(id: number): Item | null {
+    findById(id: number): ItemRecord | null {
       const row = db.prepare(`${SELECT_ITEMS} AND i.id = ?`).get(id) as ItemRow | undefined;
-      return row ? toItem(row) : null;
+      return row ? toItemRecord(row) : null;
     },
 
     findCategories(): string[] {

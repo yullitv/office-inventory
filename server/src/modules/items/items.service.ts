@@ -1,11 +1,23 @@
 import { AppError } from '../../errors/AppError.js';
+import { toDateOnly } from '../../utils/date.js';
+import { isOverdue } from '../loans/loans.rules.js';
 import type { ItemsRepository } from './items.repository.js';
 import type { CreateItemInput, ListItemsQuery, UpdateItemInput } from './items.schemas.js';
-import type { Item, ItemState } from './items.types.js';
+import type { Item, ItemRecord } from './items.types.js';
 
-export function getItemState(item: Item): ItemState {
-  if (item.currentLoan) return 'on_loan';
-  return item.status;
+const byUkrainianName = (a: string, b: string) => a.localeCompare(b, 'uk');
+
+function toItem(record: ItemRecord, today: string): Item {
+  const currentLoan = record.currentLoan && {
+    ...record.currentLoan,
+    isOverdue: isOverdue({ dueDate: record.currentLoan.dueDate, returnedAt: null }, today),
+  };
+
+  return {
+    ...record,
+    state: currentLoan ? 'on_loan' : record.status,
+    currentLoan,
+  };
 }
 
 function matchesSearch(item: Item, search: string): boolean {
@@ -15,13 +27,16 @@ function matchesSearch(item: Item, search: string): boolean {
   );
 }
 
-export function createItemsService(repository: ItemsRepository) {
+export function createItemsService(
+  repository: ItemsRepository,
+  today: () => string = () => toDateOnly(new Date()),
+) {
   function getOrThrow(id: number): Item {
-    const item = repository.findById(id);
-    if (!item) {
+    const record = repository.findById(id);
+    if (!record) {
       throw new AppError(404, 'ITEM_NOT_FOUND', `Item ${id} not found`);
     }
-    return item;
+    return toItem(record, today());
   }
 
   function assertInventoryNumberFree(
@@ -39,18 +54,20 @@ export function createItemsService(repository: ItemsRepository) {
 
   return {
     list(query: ListItemsQuery): Item[] {
+      const currentDate = today();
       return repository
         .findAll()
+        .map((record) => toItem(record, currentDate))
         .filter((item) => !query.q || matchesSearch(item, query.q))
         .filter((item) => !query.category || item.category === query.category)
-        .filter((item) => !query.state || getItemState(item) === query.state)
-        .sort((a, b) => a.name.localeCompare(b.name, 'uk'));
+        .filter((item) => !query.state || item.state === query.state)
+        .sort((a, b) => byUkrainianName(a.name, b.name));
     },
 
     getById: getOrThrow,
 
     listCategories(): string[] {
-      return repository.findCategories().sort((a, b) => a.localeCompare(b, 'uk'));
+      return repository.findCategories().sort(byUkrainianName);
     },
 
     create(input: CreateItemInput): Item {

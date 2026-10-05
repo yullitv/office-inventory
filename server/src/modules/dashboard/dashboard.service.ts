@@ -1,5 +1,5 @@
 import { addDays, toDateOnly } from '../../utils/date.js';
-import { getItemState, type ItemsService } from '../items/items.service.js';
+import type { ItemsService } from '../items/items.service.js';
 import type { ItemState } from '../items/items.types.js';
 import type { LoansService } from '../loans/loans.service.js';
 
@@ -17,7 +17,7 @@ export function createDashboardService(itemsService: ItemsService, loansService:
         lost: 0,
       };
       items.forEach((item) => {
-        counts[getItemState(item)] += 1;
+        counts[item.state] += 1;
       });
 
       return {
