@@ -15,7 +15,9 @@ const messages: Record<string, string> = {
 
 export function getErrorMessage(error: unknown): string {
   if (error instanceof ApiError) {
-    return messages[error.code] ?? error.message;
+    if (messages[error.code]) return messages[error.code];
+    if (error.status >= 500) return 'Сервер недоступний або сталася помилка. Спробуйте пізніше';
+    return error.message;
   }
   if (error instanceof TypeError) {
     return 'Сервер недоступний. Перевірте, що бекенд запущено';
