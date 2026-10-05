@@ -57,4 +57,19 @@ describe('loans', () => {
 
     expect(response.body.error.code).toBe('ITEM_ON_LOAN');
   });
+
+  it('keeps the issue note when the item is returned with its own note', async () => {
+    const loan = await request(app)
+      .post('/api/loans')
+      .send({ itemId, employeeId, dueDate: dateFromToday(3), note: 'For the conference' })
+      .expect(201);
+
+    const returned = await request(app)
+      .post(`/api/loans/${loan.body.id}/return`)
+      .send({ note: 'Scratched lid' })
+      .expect(200);
+
+    expect(returned.body.note).toBe('For the conference');
+    expect(returned.body.returnNote).toBe('Scratched lid');
+  });
 });

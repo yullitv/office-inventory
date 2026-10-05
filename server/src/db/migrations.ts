@@ -35,4 +35,7 @@ export const migrations: string[] = [
   CREATE INDEX idx_loans_item ON loans (item_id);
   CREATE UNIQUE INDEX idx_loans_one_active_per_item ON loans (item_id) WHERE returned_at IS NULL;
   `,
+  `
+  ALTER TABLE loans ADD COLUMN return_note TEXT;
+  `,
 ];
