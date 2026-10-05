@@ -1,4 +1,4 @@
-import type { Item, ItemState } from '../api/types';
+import type { ItemState } from '../api/types';
 
 export const itemStateLabels: Record<ItemState, string> = {
   available: 'Доступна',
@@ -37,10 +37,6 @@ export function describeDueDate(dueDate: string): string {
   if (days === 0) return 'сьогодні';
   if (days === 1) return 'завтра';
   return `через ${days} дн.`;
-}
-
-export function getItemState(item: Item): ItemState {
-  return item.currentLoan ? 'on_loan' : item.status;
 }
 
 export function dateFromToday(days: number): string {

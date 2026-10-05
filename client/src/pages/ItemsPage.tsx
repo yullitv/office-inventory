@@ -8,7 +8,7 @@ import { ItemActions } from '../components/ItemActions';
 import { ItemStateBadge } from '../components/ItemStateBadge';
 import { ItemFormModal } from '../components/modals/ItemFormModal';
 import { EmptyState, ErrorState, LoadingState } from '../components/states';
-import { itemStateLabels, todayDateOnly } from '../utils/format';
+import { itemStateLabels } from '../utils/format';
 
 const stateOptions = Object.entries(itemStateLabels).map(([value, label]) => ({ value, label }));
 
@@ -116,7 +116,7 @@ export function ItemsPage() {
                         <Text size="sm">{item.currentLoan.employeeName}</Text>
                         <DueDate
                           dueDate={item.currentLoan.dueDate}
-                          isOverdue={item.currentLoan.dueDate < todayDateOnly()}
+                          isOverdue={item.currentLoan.isOverdue}
                         />
                       </>
                     ) : (

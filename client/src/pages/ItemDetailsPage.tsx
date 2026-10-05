@@ -6,7 +6,7 @@ import { DueDate } from '../components/DueDate';
 import { ItemActions } from '../components/ItemActions';
 import { ItemStateBadge } from '../components/ItemStateBadge';
 import { EmptyState, ErrorState, LoadingState } from '../components/states';
-import { formatDate, formatDateTime, todayDateOnly } from '../utils/format';
+import { formatDate, formatDateTime } from '../utils/format';
 
 export function ItemDetailsPage() {
   const id = Number(useParams().id);
@@ -60,10 +60,7 @@ export function ItemDetailsPage() {
           <Text fw={500}>Зараз у {data.currentLoan.employeeName}</Text>
           <Group gap="xs">
             <Text size="sm">Повернути до:</Text>
-            <DueDate
-              dueDate={data.currentLoan.dueDate}
-              isOverdue={data.currentLoan.dueDate < todayDateOnly()}
-            />
+            <DueDate dueDate={data.currentLoan.dueDate} isOverdue={data.currentLoan.isOverdue} />
           </Group>
         </Paper>
       )}
