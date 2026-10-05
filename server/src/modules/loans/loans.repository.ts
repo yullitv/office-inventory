@@ -14,6 +14,7 @@ export type LoanRecord = {
   dueDate: string;
   returnedAt: string | null;
   note: string | null;
+  returnNote: string | null;
 };
 
 type LoanRow = {
@@ -27,13 +28,14 @@ type LoanRow = {
   due_date: string;
   returned_at: string | null;
   note: string | null;
+  return_note: string | null;
 };
 
 const SELECT_LOANS = `
   SELECT
     l.id, l.item_id, i.name AS item_name, i.inventory_number,
     l.employee_id, e.full_name AS employee_name,
-    l.issued_at, l.due_date, l.returned_at, l.note
+    l.issued_at, l.due_date, l.returned_at, l.note, l.return_note
   FROM loans l
   JOIN items i ON i.id = l.item_id
   JOIN employees e ON e.id = l.employee_id
@@ -51,6 +53,7 @@ function toLoanRecord(row: LoanRow): LoanRecord {
     dueDate: row.due_date,
     returnedAt: row.returned_at,
     note: row.note,
+    returnNote: row.return_note,
   };
 }
 
@@ -89,13 +92,13 @@ export function createLoansRepository(db: Db) {
       return Number(result.lastInsertRowid);
     },
 
-    markReturned(loan: LoanRecord, itemStatus: ItemStatus, note: string | null): void {
+    markReturned(loan: LoanRecord, itemStatus: ItemStatus, returnNote: string | null): void {
       transaction(db, () => {
         db.prepare(
           `UPDATE loans
-           SET returned_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), note = COALESCE(?, note)
+           SET returned_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), return_note = ?
            WHERE id = ?`,
-        ).run(note, loan.id);
+        ).run(returnNote, loan.id);
         db.prepare(
           `UPDATE items
            SET status = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')

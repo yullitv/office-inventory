@@ -9,5 +9,6 @@ export type Loan = {
   dueDate: string;
   returnedAt: string | null;
   note: string | null;
+  returnNote: string | null;
   isOverdue: boolean;
 };

@@ -18,6 +18,7 @@ type SeedLoan = {
   dueInDays: number;
   returnedDaysAgo?: number;
   note?: string;
+  returnNote?: string;
 };
 
 const employees = [
@@ -145,7 +146,7 @@ const items: SeedItem[] = [
 
 const loans: SeedLoan[] = [
   { item: 'LT-001', employee: 0, issuedDaysAgo: 3, dueInDays: 4 },
-  { item: 'PR-001', employee: 1, issuedDaysAgo: 1, dueInDays: 0 },
+  { item: 'PR-001', employee: 1, issuedDaysAgo: 1, dueInDays: 0, note: 'Для презентації клієнту' },
   { item: 'PB-001', employee: 2, issuedDaysAgo: 10, dueInDays: -3 },
   { item: 'BG-001', employee: 3, issuedDaysAgo: 6, dueInDays: -1 },
   { item: 'UM-001', employee: 4, issuedDaysAgo: 0, dueInDays: 1 },
@@ -157,7 +158,7 @@ const loans: SeedLoan[] = [
     issuedDaysAgo: 9,
     dueInDays: -5,
     returnedDaysAgo: 5,
-    note: 'Повернуто з несправною батареєю',
+    returnNote: 'Не тримає заряд, передано в ремонт',
   },
   { item: 'CM-002', employee: 7, issuedDaysAgo: 30, dueInDays: -25, returnedDaysAgo: 25 },
 ];
@@ -188,8 +189,8 @@ transaction(db, () => {
   );
 
   const insertLoan = db.prepare(
-    `INSERT INTO loans (item_id, employee_id, issued_at, due_date, returned_at, note)
-     VALUES (?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO loans (item_id, employee_id, issued_at, due_date, returned_at, note, return_note)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
   );
   for (const loan of loans) {
     const itemId = itemIds.get(loan.item);
@@ -204,6 +205,7 @@ transaction(db, () => {
       dueIn(loan.dueInDays),
       loan.returnedDaysAgo === undefined ? null : daysAgoIso(loan.returnedDaysAgo),
       loan.note ?? null,
+      loan.returnNote ?? null,
     );
   }
 });
