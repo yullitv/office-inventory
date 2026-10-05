@@ -14,7 +14,8 @@
     "test": "npm run test -w server",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "npm run typecheck --workspaces"
+    "typecheck": "npm run typecheck --workspaces",
+    "setup": "npm install && npm run db:seed -w server"
   },
   "devDependencies": {
     "concurrently": "^9.2.4",
