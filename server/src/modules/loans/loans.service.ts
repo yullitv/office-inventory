@@ -3,12 +3,9 @@ import { toDateOnly } from '../../utils/date.js';
 import type { EmployeesRepository } from '../employees/employees.repository.js';
 import type { ItemsRepository } from '../items/items.repository.js';
 import type { LoanRecord, LoansRepository } from './loans.repository.js';
+import { isOverdue } from './loans.rules.js';
 import type { CreateLoanInput, ListLoansQuery, ReturnLoanInput } from './loans.schemas.js';
 import type { Loan } from './loans.types.js';
-
-export function isOverdue(loan: Pick<LoanRecord, 'dueDate' | 'returnedAt'>, today: string) {
-  return loan.returnedAt === null && loan.dueDate < today;
-}
 
 type LoansServiceDeps = {
   loansRepository: LoansRepository;
