@@ -2,13 +2,12 @@ import { Anchor, Button, Group, Select, Stack, Table, Text, TextInput, Title } f
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { Link, useSearchParams } from 'react-router';
 import { useCategories, useItems } from '../api/hooks';
-import type { ItemState } from '../api/types';
 import { DueDate } from '../components/DueDate';
 import { ItemActions } from '../components/ItemActions';
 import { ItemStateBadge } from '../components/ItemStateBadge';
 import { ItemFormModal } from '../components/modals/ItemFormModal';
 import { EmptyState, ErrorState, LoadingState } from '../components/states';
-import { itemStateLabels } from '../utils/format';
+import { isItemState, itemStateLabels } from '../utils/format';
 
 const stateOptions = Object.entries(itemStateLabels).map(([value, label]) => ({ value, label }));
 
@@ -16,7 +15,8 @@ export function ItemsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get('q') ?? '';
   const category = searchParams.get('category') ?? undefined;
-  const state = (searchParams.get('state') as ItemState | null) ?? undefined;
+  const stateParam = searchParams.get('state');
+  const state = isItemState(stateParam) ? stateParam : undefined;
   const [debouncedQ] = useDebouncedValue(q, 300);
   const [createOpened, create] = useDisclosure();
 

@@ -7,6 +7,10 @@ export const itemStateLabels: Record<ItemState, string> = {
   lost: 'Загублена',
 };
 
+export function isItemState(value: string | null): value is ItemState {
+  return value !== null && Object.hasOwn(itemStateLabels, value);
+}
+
 export const itemStateColors: Record<ItemState, string> = {
   available: 'green',
   on_loan: 'blue',
