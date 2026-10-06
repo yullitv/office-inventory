@@ -80,7 +80,7 @@ export function ItemDetailsPage() {
                 <Table.Th>Видано</Table.Th>
                 <Table.Th>Термін</Table.Th>
                 <Table.Th>Повернуто</Table.Th>
-                <Table.Th>Примітки</Table.Th>{' '}
+                <Table.Th>Примітки</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -109,7 +109,7 @@ export function ItemDetailsPage() {
                         Під час повернення: {loan.returnNote}
                       </Text>
                     )}
-                  </Table.Td>{' '}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
