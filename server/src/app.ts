@@ -16,6 +16,8 @@ import { createLoansService } from './modules/loans/loans.service.js';
 export function createApp(db: Db) {
   const app = express();
 
+  app.disable('x-powered-by');
+
   app.use(express.json());
 
   app.get('/api/health', (_req, res) => {

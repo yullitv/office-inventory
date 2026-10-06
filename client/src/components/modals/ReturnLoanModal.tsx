@@ -59,7 +59,13 @@ function ReturnLoanForm({ target, onDone }: { target: ReturnTarget; onDone: () =
             <Radio value="lost" label="Загублена" />
           </Stack>
         </Radio.Group>
-        <Textarea label="Примітка" autosize minRows={2} {...form.getInputProps('note')} />
+        <Textarea
+          label="Примітка"
+          autosize
+          minRows={2}
+          maxLength={500}
+          {...form.getInputProps('note')}
+        />
         <Group justify="flex-end">
           <Button variant="default" onClick={onDone}>
             Скасувати
