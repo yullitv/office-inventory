@@ -77,15 +77,26 @@ function ItemForm({ item, onDone }: { item?: Item; onDone: () => void }) {
     <form onSubmit={handleSubmit}>
       <Stack>
         {mutation.error && <Alert color="red">{getErrorMessage(mutation.error)}</Alert>}
-        <TextInput label="Назва" withAsterisk {...form.getInputProps('name')} />
+        <TextInput label="Назва" withAsterisk maxLength={100} {...form.getInputProps('name')} />
         <Autocomplete
           label="Категорія"
           withAsterisk
+          maxLength={50}
           data={categories.data ?? []}
           {...form.getInputProps('category')}
         />
-        <TextInput label="Інвентарний номер" {...form.getInputProps('inventoryNumber')} />
-        <Textarea label="Опис" autosize minRows={2} {...form.getInputProps('description')} />
+        <TextInput
+          label="Інвентарний номер"
+          maxLength={30}
+          {...form.getInputProps('inventoryNumber')}
+        />
+        <Textarea
+          label="Опис"
+          autosize
+          minRows={2}
+          maxLength={500}
+          {...form.getInputProps('description')}
+        />
         <Select
           label="Стан"
           data={statusOptions}

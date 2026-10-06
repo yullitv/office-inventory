@@ -86,7 +86,13 @@ function IssueLoanForm({ item, onDone }: { item: Item; onDone: () => void }) {
           min={todayDateOnly()}
           {...form.getInputProps('dueDate')}
         />
-        <Textarea label="Примітка" autosize minRows={2} {...form.getInputProps('note')} />
+        <Textarea
+          label="Примітка"
+          autosize
+          minRows={2}
+          maxLength={500}
+          {...form.getInputProps('note')}
+        />
         <Group justify="flex-end">
           <Button variant="default" onClick={onDone}>
             Скасувати
