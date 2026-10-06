@@ -3,7 +3,7 @@ import { toDateOnly } from '../../utils/date.js';
 import type { EmployeesRepository } from '../employees/employees.repository.js';
 import type { ItemsRepository } from '../items/items.repository.js';
 import type { LoanRecord, LoansRepository } from './loans.repository.js';
-import { isOverdue } from './loans.rules.js';
+import { isOverdue, latestDueDate, MAX_LOAN_DAYS } from './loans.rules.js';
 import type { CreateLoanInput, ListLoansQuery, ReturnLoanInput } from './loans.schemas.js';
 import type { Loan } from './loans.types.js';
 
@@ -55,8 +55,16 @@ export function createLoansService({
       if (item.status !== 'available') {
         throw new AppError(409, 'ITEM_NOT_AVAILABLE', `Item cannot be issued: ${item.status}`);
       }
-      if (input.dueDate < today()) {
+      const currentDate = today();
+      if (input.dueDate < currentDate) {
         throw new AppError(400, 'DUE_DATE_IN_PAST', 'Due date cannot be in the past');
+      }
+      if (input.dueDate > latestDueDate(currentDate)) {
+        throw new AppError(
+          400,
+          'DUE_DATE_TOO_FAR',
+          `Due date cannot be more than ${MAX_LOAN_DAYS} days ahead`,
+        );
       }
 
       const id = loansRepository.create(input);

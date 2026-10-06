@@ -10,6 +10,7 @@ const messages: Record<string, string> = {
   ITEM_ALREADY_ON_LOAN: 'Цю річ уже видано іншому співробітнику',
   ITEM_NOT_AVAILABLE: 'Річ у ремонті або загублена, її не можна видати',
   DUE_DATE_IN_PAST: 'Дата повернення не може бути в минулому',
+  DUE_DATE_TOO_FAR: 'Дата повернення не може бути пізніше ніж через рік',
   PAYLOAD_TOO_LARGE: 'Занадто великий обсяг даних',
   LOAN_ALREADY_RETURNED: 'Цю річ уже повернули',
 };

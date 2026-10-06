@@ -6,6 +6,8 @@ import type { Item } from '../../api/types';
 import { getErrorMessage } from '../../utils/errors';
 import { dateFromToday, todayDateOnly } from '../../utils/format';
 
+const MAX_LOAN_DAYS = 365;
+
 type Props = {
   item: Item;
   opened: boolean;
@@ -34,7 +36,8 @@ function IssueLoanForm({ item, onDone }: { item: Item; onDone: () => void }) {
       employeeId: (value) => (value ? null : 'Оберіть співробітника'),
       dueDate: (value) => {
         if (!value) return 'Вкажіть дату повернення';
-        return value < todayDateOnly() ? 'Дата не може бути в минулому' : null;
+        if (value < todayDateOnly()) return 'Дата не може бути в минулому';
+        return value > dateFromToday(MAX_LOAN_DAYS) ? 'Не пізніше ніж через рік' : null;
       },
     },
   });
@@ -84,6 +87,7 @@ function IssueLoanForm({ item, onDone }: { item: Item; onDone: () => void }) {
           type="date"
           withAsterisk
           min={todayDateOnly()}
+          max={dateFromToday(MAX_LOAN_DAYS)}
           {...form.getInputProps('dueDate')}
         />
         <Textarea

@@ -34,6 +34,15 @@ describe('loans', () => {
     expect(response.body.error.code).toBe('DUE_DATE_IN_PAST');
   });
 
+  it('rejects a due date more than a year ahead', async () => {
+    const loan = await issue(365).expect(201);
+    await request(app).post(`/api/loans/${loan.body.id}/return`).send({}).expect(200);
+
+    const response = await issue(366).expect(400);
+
+    expect(response.body.error.code).toBe('DUE_DATE_TOO_FAR');
+  });
+
   it('moves the item to repair when it is returned broken', async () => {
     const loan = await issue().expect(201);
 
