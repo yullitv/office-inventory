@@ -73,7 +73,7 @@ export function createItemsRepository(db: Db) {
 
     isInventoryNumberTaken(inventoryNumber: string, exceptId?: number): boolean {
       const row = db
-        .prepare('SELECT id FROM items WHERE inventory_number = ? AND id != ?')
+        .prepare('SELECT id FROM items WHERE inventory_number = ? COLLATE NOCASE AND id != ?')
         .get(inventoryNumber, exceptId ?? 0);
       return row !== undefined;
     },
