@@ -58,10 +58,14 @@ export function useUpdateItem(id: number) {
 }
 
 export function useDeleteItem() {
+  const queryClient = useQueryClient();
   const invalidate = useInvalidateInventory();
   return useMutation({
     mutationFn: (id: number) => api.deleteItem(id),
-    onSuccess: invalidate,
+    onSuccess: (_data, id) => {
+      queryClient.removeQueries({ queryKey: queryKeys.item(id) });
+      return invalidate();
+    },
   });
 }
 
